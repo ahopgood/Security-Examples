@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.alexander.security.examples</groupId>
+	<artifactId>Insecure</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	
+	<properties>
+		<java.version>1.6</java.version>
+		<cargo.version>1.2.4</cargo.version>
+		<hostname>localhost</hostname>
+		<port>8080</port>
+		<servlet.container.username>robomanager</servlet.container.username>
+		<servlet.container.password>robomanager</servlet.container.password>
+		<servlet.container.manager.url>manager/text</servlet.container.manager.url>
+		<tomcat.containerId>tomcat7x</tomcat.containerId>
+	</properties>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<executable>C:\Program Files\Java\jdk1.7.0_55\bin\javac.exe</executable>
+				</configuration>
+			</plugin>
+ 			<plugin>
+      			<groupId>org.codehaus.cargo</groupId>
+      			<artifactId>cargo-maven2-plugin</artifactId>
+      			<version>${cargo.version}</version>
+      			<configuration>
+        	 		<container>
+            			<containerId>${tomcat.containerId}</containerId>
+            			<type>remote</type>
+          			</container>
+          			<configuration>
+          				<type>runtime</type>
+						<properties>
+							<cargo.hostname>${hostname}</cargo.hostname>
+							<cargo.servlet.port>${port}</cargo.servlet.port>
+							<cargo.remote.username>${servlet.container.username}</cargo.remote.username>
+							<cargo.remote.password>${servlet.container.password}</cargo.remote.password>
+							<cargo.tomcat.manager.url>${servlet.container.manager.url}</cargo.tomcat.manager.url>
+						</properties>
+          			</configuration>
+ 				</configuration>
+ 			</plugin>
+		</plugins>
+	</build>
+	
+	<dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.4</version>
+            <scope>provided</scope>
+        </dependency>        
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+		<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.32</version>
+			<scope>compile</scope>
+		</dependency>
+        
+	</dependencies>
+</project>
