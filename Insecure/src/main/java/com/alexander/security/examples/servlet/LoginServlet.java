@@ -50,12 +50,16 @@ public class LoginServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/"+DATABASE_NAME+"?user="+DB_USER+"&password="+DB_PASSWORD);
-//			PreparedStatement statement = conn.prepareStatement("Select * from "+DB_TABLE_NAME+" where username=\""+username+"\" and password=\""+password+"\";");
-			Statement statement = conn.createStatement();
-			statement.execute("Select * from "+DB_TABLE_NAME+" where username=\""+username+"\" and password=\""+password+"\";");
+			//can be exploited by using username:
+			//1" or "1" = "1" -- or
+			//Resulting in Select * from "+DB_TABLE_NAME+" where username="1" or "1" = "1" -- or "and password="";
+			PreparedStatement statement = conn.prepareStatement("Select * from "+DB_TABLE_NAME+" where username=\""+username+"\" and password=\""+password+"\";");
+//			Statement statement = conn.createStatement();
+//			statement.execute("Select * from "+DB_TABLE_NAME+" where username=\""+username+"\" and password=\""+password+"\";");
 //			statement.executeQuery("Select * from unencrypted_users");
 //			PreparedStatement statement = conn.prepareStatement("Select * from "+DB_TABLE_NAME+";");
-//			statement.execute();
+			statement.execute();
+			
 			ResultSet result = statement.getResultSet();
 			if (result.next()){
 				username = result.getString(1);

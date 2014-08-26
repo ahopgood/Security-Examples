@@ -1,5 +1,34 @@
 <html>
 <head>
+	<script type="text/javascript" charset="UTF-8" src="resources/jquery-2.1.1.js"></script>
+	<script type="text/javascript">
+		window.onload = test;
+		function test(){
+			console.log("In the test method");
+		}
+		
+		function toggleView(){
+			console.log("in toggle view");
+			var show = $(".hide")
+			//show = document.getElementByClassName("hide");			
+			var hide = $(".show");
+			//hide = document.getElementByClassName("show");
+			if (show != undefined){
+				show.attr("class","show");
+			}
+			if (hide != undefined){
+				hide.attr("class","hide");
+			}
+		}
+	</script>
+	<style type="text/css">
+		.hide {
+			display:none;
+		}
+		.show {
+			display:inline;
+		}
+	</style>
 
 </head>
 
@@ -15,5 +44,17 @@
 			<tr><td><input type="submit" value="Login"/></td></tr>
 		</table>
 	</form>
+	
+	<fieldset onclick="toggleView()">
+		<legend>Show SQL Exploits</legend>
+		<table class="show">	
+			<caption></caption>
+			<thead><tr><td>Username</td><td>Password</td><td>Outcome</td></tr></thead>
+			<tr><td>1" or "1" = "1</td><td>1" or "1" = "1</td><td>Authenticated as first user in table</td></tr>
+			<tr><td>1" or "1" = "1" --</td><td>" or "</td><td>Authenticated as first user in table</td></tr>
+			<tr><td>1" or "1" = "1" -- or</td><td></td><td>Authenticated as first user in table</td></tr>
+			<tr><td></td><td></td><td></td></tr>
+		</table>
+	</fieldset>
 </body>
 </html>
