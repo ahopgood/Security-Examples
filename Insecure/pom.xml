@@ -14,6 +14,8 @@
 		<servlet.container.password>robomanager</servlet.container.password>
 		<servlet.container.manager.url>manager/text</servlet.container.manager.url>
 		<tomcat.containerId>tomcat7x</tomcat.containerId>
+		<slf4j.version>1.7.2</slf4j.version>
+		<log4j.version>1.2.12</log4j.version>
 	</properties>
 	
 	<build>
@@ -70,6 +72,21 @@
 			<version>5.1.32</version>
 			<scope>compile</scope>
 		</dependency>
-        
+
+        <dependency>
+        	<groupId>log4j</groupId>
+        	<artifactId>log4j</artifactId>
+        	<version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.slf4j</groupId>
+        	<artifactId>slf4j-api</artifactId>
+        	<version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.slf4j</groupId>
+        	<artifactId>slf4j-log4j12</artifactId>
+        	<version>${slf4j.version}</version>
+        </dependency>
 	</dependencies>
 </project>

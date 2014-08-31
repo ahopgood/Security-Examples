@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.BasicConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class LoginServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -1863888622010767349L;
@@ -29,8 +33,10 @@ public class LoginServlet extends HttpServlet {
 	private static final String DB_PASSWORD_COL		= "password";
 	
 	private static final String ENC_DB_TABLE_NAME	= "encrypted_users";
-	
+	private static final Logger log	= LoggerFactory.getLogger(LoginServlet.class);
+
 	static {
+		BasicConfigurator.configure();
 		try {
 			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 		} catch (SQLException e) {
@@ -42,39 +48,42 @@ public class LoginServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
 
 		String username	= request.getParameter(USERNAME_PARAM_KEY);
-		System.out.println("Username: "+username);		
+		log.debug("Username: "+username);		
 				
 		String password = request.getParameter(PASSWORD_PARAM_KEY);
-		System.out.println("Password: "+password);
+		log.debug("Password: "+password);
 
         PrintWriter out = response.getWriter();
+        String connectionString = "jdbc:mysql://localhost/"+DATABASE_NAME+"?user="+DB_USER+"&password="+DB_PASSWORD+"&allowMultiQueries=true";
 		try {
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/"+DATABASE_NAME+"?user="+DB_USER+"&password="+DB_PASSWORD);
-			//can be exploited by using username:
-			//1" or "1" = "1" -- or
-			//Resulting in Select * from "+DB_TABLE_NAME+" where username="1" or "1" = "1" -- or "and password="";
-			PreparedStatement statement = conn.prepareStatement("Select * from "+DB_TABLE_NAME+" where username=\""+username+"\" and password=\""+password+"\";");
-//			Statement statement = conn.createStatement();
-//			statement.execute("Select * from "+DB_TABLE_NAME+" where username=\""+username+"\" and password=\""+password+"\";");
-//			statement.executeQuery("Select * from unencrypted_users");
-//			PreparedStatement statement = conn.prepareStatement("Select * from "+DB_TABLE_NAME+";");
-			statement.execute();
-			
-			ResultSet result = statement.getResultSet();
-			if (result.next()){
-				username = result.getString(1);
-		        out.println( "User "+username+" logged in.");
-			} else {
-				out.println("Sorry your credentials are not sufficient.");
+			log.debug("Connecting to the following database:");
+			log.debug(connectionString);
+			Connection conn = DriverManager.getConnection(connectionString);
+			try {
+				
+				String sqlQuery = "Select * from "+DB_TABLE_NAME+" where "+DB_USERNAME_COL+"=\""+username+"\" and "+DB_PASSWORD_COL+"=\""+password+"\";";
+				log.debug(sqlQuery);
+				PreparedStatement statement = conn.prepareStatement(sqlQuery);
+				statement.execute(); 
+				ResultSet result = statement.getResultSet();
+				statement.closeOnCompletion();
+				if (result.next()){
+					username = result.getString(1);
+					out.println( "User "+username+" logged in.");
+					out.println("SQL Query used:");
+					out.println(conn.nativeSQL(sqlQuery));
+				} else {
+					out.println("Sorry your credentials are not sufficient.");
+				}		
+			} catch (SQLException e) {
+				out.println(e.getLocalizedMessage());
+				log.error("There was a issue with executing the SQL statement.",e);
+			} finally {
+				conn.close();
 			}
-//			while(result.next()){
-//				String dbUname 		= result.getString(DB_USERNAME_COL);
-//				String dbPassword 	= result.getString(DB_PASSWORD_COL);
-//				System.out.println("DB Username "+dbUname+" Password "+dbPassword);
-//			}			
 		} catch (SQLException e) {
 			out.println(e.getLocalizedMessage());
-			e.printStackTrace();
+			log.error("There was a issue with executing the SQL connection.",e);
 		}
         out.flush();
         out.close();

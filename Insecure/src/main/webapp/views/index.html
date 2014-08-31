@@ -28,31 +28,38 @@
 		.show {
 			display:inline;
 		}
+      	.inputField {
+      		width: 300px;
+        }
 	</style>
 
-</head>
+</head> 	 
 
 <body>
 	<h2>This is an insecure web app for testing security exploits</h2>
 	<form action="login" method="post">
 		<table>
 			<!-- Username row -->
-			<tr><td>Username:</td><td><input type="text" name="username"/></td></tr>
+			<tr><td>Username:</td><td><input type="text" name="username" class="inputField"/></td></tr>
 			<!-- Password row -->
-			<tr><td>Password:</td><td><input type="password" name="password"/></td></tr>
+			<tr><td>Password:</td><td><input type="password" name="password" class="inputField"/></td></tr>
 			<!-- Submit -->
 			<tr><td><input type="submit" value="Login"/></td></tr>
 		</table>
 	</form>
 	
-	<fieldset onclick="toggleView()">
-		<legend>Show SQL Exploits</legend>
+	<fieldset>
+		<legend onclick="toggleView()">Show SQL Exploits</legend>
 		<table class="show">	
 			<caption></caption>
 			<thead><tr><td>Username</td><td>Password</td><td>Outcome</td></tr></thead>
 			<tr><td>1" or "1" = "1</td><td>1" or "1" = "1</td><td>Authenticated as first user in table</td></tr>
 			<tr><td>1" or "1" = "1" --</td><td>" or "</td><td>Authenticated as first user in table</td></tr>
 			<tr><td>1" or "1" = "1" -- or</td><td></td><td>Authenticated as first user in table</td></tr>
+			<tr><td>1" or "1" = "1" /*</td><td>*/"</td><td>Authenticated as first user in table</td></tr>
+			<!-- 
+				<tr><td>1" or "1" = "1"; insert into unencrypted_users values ("geoff", "geoff"); -- </td><td></td><td>Authenticated as first user in table. New user geoff is entered</td></tr>
+			-->
 			<tr><td></td><td></td><td></td></tr>
 		</table>
 	</fieldset>

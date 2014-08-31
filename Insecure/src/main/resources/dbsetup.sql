@@ -14,4 +14,7 @@ insert into unencrypted_users values ("npatel","4mh2");
 insert into unencrypted_users values ("sgurr","mvj8");
 insert into unencrypted_users values ("vvenkata","okf6");
 
+/* Create a table where users are primary and unique keys */
+
 CREATE TABLE IF NOT EXISTS encrypted_users (username VARCHAR(255), password VARCHAR(255));
+
