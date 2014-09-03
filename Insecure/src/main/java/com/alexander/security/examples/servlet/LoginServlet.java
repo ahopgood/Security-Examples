@@ -23,11 +23,7 @@ public class LoginServlet extends HttpServlet {
 
 	private static final String USERNAME_PARAM_KEY 	= "username";
 	private static final String PASSWORD_PARAM_KEY 	= "password";
-	
-	private static final String DATABASE_NAME		= "security_test";
-	private static final String DB_USER				= "test";
-	private static final String DB_PASSWORD			= "test";
-	
+		
 	private static final String DB_TABLE_NAME		= "unencrypted_users";
 	private static final String DB_USERNAME_COL		= "username";
 	private static final String DB_PASSWORD_COL		= "password";
@@ -38,6 +34,7 @@ public class LoginServlet extends HttpServlet {
 	static {
 		BasicConfigurator.configure();
 		try {
+			//Initialise DB Driver for mysql
 			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -54,7 +51,7 @@ public class LoginServlet extends HttpServlet {
 		log.debug("Password: "+password);
 
         PrintWriter out = response.getWriter();
-        String connectionString = "jdbc:mysql://localhost/"+DATABASE_NAME+"?user="+DB_USER+"&password="+DB_PASSWORD+"&allowMultiQueries=true";
+        String connectionString = "jdbc:mysql://localhost/"+DBConstants.DATABASE_NAME+"?user="+DBConstants.DB_USER+"&password="+DBConstants.DB_PASSWORD+"&allowMultiQueries=true";
 		try {
 			log.debug("Connecting to the following database:");
 			log.debug(connectionString);
@@ -72,6 +69,8 @@ public class LoginServlet extends HttpServlet {
 					out.println( "User "+username+" logged in.");
 					out.println("SQL Query used:");
 					out.println(conn.nativeSQL(sqlQuery));
+					out.println("Connecting via connection string:");
+					out.println(connectionString);
 				} else {
 					out.println("Sorry your credentials are not sufficient.");
 				}		
