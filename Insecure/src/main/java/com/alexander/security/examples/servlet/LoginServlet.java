@@ -24,9 +24,9 @@ public class LoginServlet extends HttpServlet {
 	private static final String USERNAME_PARAM_KEY 	= "username";
 	private static final String PASSWORD_PARAM_KEY 	= "password";
 		
-	private static final String DB_TABLE_NAME		= "unencrypted_users";
-	private static final String DB_USERNAME_COL		= "username";
-	private static final String DB_PASSWORD_COL		= "password";
+//	private static final String DB_TABLE_NAME		= "unencrypted_users";
+//	private static final String DB_USERNAME_COL		= "username";
+//	private static final String DB_PASSWORD_COL		= "password";
 	
 	private static final String ENC_DB_TABLE_NAME	= "encrypted_users";
 	private static final Logger log	= LoggerFactory.getLogger(LoginServlet.class);
@@ -56,10 +56,9 @@ public class LoginServlet extends HttpServlet {
 			log.debug("Connecting to the following database:");
 			log.debug(connectionString);
 			Connection conn = DriverManager.getConnection(connectionString);
+			String sqlQuery = "Select * from "+DBConstants.UNENC_TABLE_NAME+" where "+DBConstants.UNENC_USERNAME_COL+"=\""+username+"\" and "+DBConstants.PASSWORD_KEY+"=\""+password+"\";";
+			log.debug(sqlQuery);
 			try {
-				
-				String sqlQuery = "Select * from "+DB_TABLE_NAME+" where "+DB_USERNAME_COL+"=\""+username+"\" and "+DB_PASSWORD_COL+"=\""+password+"\";";
-				log.debug(sqlQuery);
 				PreparedStatement statement = conn.prepareStatement(sqlQuery);
 				statement.execute(); 
 				ResultSet result = statement.getResultSet();
@@ -76,6 +75,7 @@ public class LoginServlet extends HttpServlet {
 				}		
 			} catch (SQLException e) {
 				out.println(e.getLocalizedMessage());
+				out.println(sqlQuery);
 				log.error("There was a issue with executing the SQL statement.",e);
 			} finally {
 				conn.close();

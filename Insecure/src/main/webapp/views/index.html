@@ -1,30 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Injection attach index page</title>
-<head>
-	<script type="text/javascript" charset="UTF-8" src="resources/jquery-2.1.1.js"></script>
-	<script type="text/javascript" src="resources/InsecureUtils.js"></script>
-	<style type="text/css">
-		.hide {
-			display:none;
-		}
-		.show {
-			display:inline;
-		}
-      	.inputField {
-      		width: 300px;
-        }
-	</style>
-</head> 	
+	<meta charset="ISO-8859-1">
+	<!-- Set content delay to greater than 0 in case the browser ignores the value of 0 -->
+	<meta http-equiv="refresh" content="5;url=views/InjectionIndex.html" />
+</head>
 <body>
-	<ul>
-		<li><a href="views/jdbc-multiple-statements.html">JDBC Connection with multiple statements per execution</a></li>
-	</ul>
-	<form action="views/resetDatabase" method="get">
-		<label>Reset the database to its original state</label>
-		<input type="submit" value="Reset"/>
-	</form>
+	<h3>Redirecting to the Injection Index..</h3>
 </body>
 </html>
