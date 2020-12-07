@@ -9,9 +9,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class BikesThumbnail {
 
-
     private final String bikeId;
-    private final String imageUrl;
+    private final String thumbnailImageUrl;
     private final String title;
 
 }

@@ -21,8 +21,11 @@ public class BikesController {
         return ResponseEntity.of(Optional.ofNullable(List.of(BikesThumbnail.builder().build())));
     }
 
-    @GetMapping(value = "/bikes/detail/{bikeId}")
+    @GetMapping(value = "/bikes/detail/{bikeId}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BikeDetails> getBikeDetails(@PathVariable("bikeId") String bikeId) {
-        return ResponseEntity.of(Optional.ofNullable(BikeDetails.builder().build()));
+        return ResponseEntity.of(Optional.ofNullable(BikeDetails.builder()
+                .bikeId(bikeId).build()));
     }
 }
