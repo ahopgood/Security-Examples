@@ -5,9 +5,14 @@ import com.alexander.security.examples.persistent.xss.service.model.BikeDetails;
 
 import java.util.List;
 
-public interface BikeService {
+public class BikeServiceImpl implements BikeService {
+    @Override
+    public BikeDetails getBikeDetails(String id) {
+        return null;
+    }
 
-    BikeDetails getBikeDetails(String id);
-
-    List<BikeThumbnail> getBikeThumbnails();
+    @Override
+    public List<BikeThumbnail> getBikeThumbnails() {
+        return null;
+    }
 }
