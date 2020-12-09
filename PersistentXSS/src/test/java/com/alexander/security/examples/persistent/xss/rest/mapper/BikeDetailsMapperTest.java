@@ -9,12 +9,12 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BikeDetailsResponseMapperTest {
+class BikeDetailsMapperTest {
 
     private final String description = "A hard tail bike perfect for trails";
     private final String title = "Trek Ticket 20";
     private final String bikeId = "12";
-    private final String fullImageUrl = "https://dirtybikes.com/trekticket20.png";
+    private final String fullImageUrl = "large/trekticket20.png";
     private final String comment1 = "I rode this bike until it broke";
     private final String comment2 = "Bought this in the end of season sale, bargain!";
 

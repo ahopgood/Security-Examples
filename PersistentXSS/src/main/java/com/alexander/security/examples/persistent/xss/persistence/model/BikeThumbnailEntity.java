@@ -10,6 +10,7 @@ import lombok.Getter;
 public class BikeThumbnailEntity {
 
     //Table column names
+    public static final String BIKE_ID = "bike_id";
     public static final String ID = "id";
     public static final String URL = "url";
 

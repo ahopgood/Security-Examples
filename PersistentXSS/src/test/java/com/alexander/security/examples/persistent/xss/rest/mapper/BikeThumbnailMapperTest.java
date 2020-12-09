@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BikeThumbnailResponseMapperTest {
+class BikeThumbnailMapperTest {
 
     private final BikeThumbnailMapper mapper = new BikeThumbnailMapper();
 
