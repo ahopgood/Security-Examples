@@ -1,7 +1,9 @@
 package com.alexander.security.examples.persistent.xss.service;
 
 import com.alexander.security.examples.persistent.xss.Mapper;
+import com.alexander.security.examples.persistent.xss.persistence.model.BikeDetailsEntity;
 import com.alexander.security.examples.persistent.xss.persistence.model.BikeThumbnailEntity;
+import com.alexander.security.examples.persistent.xss.persistence.repository.BikeDetailsRepository;
 import com.alexander.security.examples.persistent.xss.persistence.repository.BikeThumbnailRepository;
 import com.alexander.security.examples.persistent.xss.service.model.BikeThumbnail;
 import com.alexander.security.examples.persistent.xss.service.model.BikeDetails;
@@ -17,16 +19,23 @@ public class BikeServiceImpl implements BikeService {
     private final BikeThumbnailRepository bikeThumbnailRepository;
     private final Mapper<BikeThumbnail, BikeThumbnailEntity> bikeThumbnailMapper;
 
+    private final BikeDetailsRepository bikeDetailsRepository;
+    private final Mapper<BikeDetails, BikeDetailsEntity> bikeDetailsMapper;
+
     @Inject
     public BikeServiceImpl(BikeThumbnailRepository bikeThumbnailRepository,
-                           Mapper<BikeThumbnail, BikeThumbnailEntity> bikeThumbnailMapper) {
+                           Mapper<BikeThumbnail, BikeThumbnailEntity> bikeThumbnailMapper,
+                           BikeDetailsRepository bikeDetailsRepository,
+                           Mapper<BikeDetails, BikeDetailsEntity> bikeDetailsMapper) {
         this.bikeThumbnailRepository = bikeThumbnailRepository;
         this.bikeThumbnailMapper = bikeThumbnailMapper;
+        this.bikeDetailsRepository = bikeDetailsRepository;
+        this.bikeDetailsMapper = bikeDetailsMapper;
     }
 
     @Override
     public BikeDetails getBikeDetails(String id) {
-        return null;
+        return bikeDetailsMapper.map(bikeDetailsRepository.getBikeDetails(id));
     }
 
     @Override
