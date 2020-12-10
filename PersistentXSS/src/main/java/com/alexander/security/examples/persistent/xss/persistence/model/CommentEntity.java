@@ -8,8 +8,8 @@ import lombok.Getter;
 public class CommentEntity {
 
     //Table column names
-    private static final String ID = "id";
-    private static final String COMMENT = "comment";
+    public static final String ID = "id";
+    public static final String COMMENT = "comment";
 
     private final String id;
     private final String comment;

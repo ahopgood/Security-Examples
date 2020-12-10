@@ -9,16 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.sql.DataSource;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JdbcTest
 @ExtendWith(SpringExtension.class)
-class JdbiBikeThumbnailEntityRepositoryTest {
-
-    @Autowired
-    private DataSource dataSource;
+class JdbiBikeThumbnailRepositoryTest {
 
     @Autowired
     private Jdbi jdbi;
@@ -31,7 +26,6 @@ class JdbiBikeThumbnailEntityRepositoryTest {
     void testGetBikeThumbnails() {
         repository = new JdbiBikeThumbnailRepository(jdbi, jdbiBikeThumbnailMapper);
 
-        assertThat(dataSource).isNotNull();
         assertThat(jdbi).isNotNull();
         assertThat(repository).isNotNull();
 

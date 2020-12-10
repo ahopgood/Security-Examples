@@ -11,13 +11,16 @@ import java.util.List;
 public class BikeDetailsEntity {
 
     //Table Column names
-    private static final String URL = "url";
-    private static final String DESCRIPTION = "description";
+    public static final String ID = "id";
+    public static final String BIKE_ID = "bike_id";
+    public static final String URL = "url";
+    public static final String DESCRIPTION = "description";
+    public static final String COMMENT_ID = "comment_id";
 
     private final String bikeId;
     private final String title;
     private final String description;
     private final String url;
     @Builder.Default
-    private final List<CommentEntity> commentEntities = new LinkedList<>();
+    private final List<CommentEntity> comments = new LinkedList<>();
 }

@@ -16,7 +16,7 @@ public class BikeDetailsMapper implements Mapper<BikeDetails, BikeDetailsEntity>
                 .bikeDescription(bikeDetailsEntity.getDescription())
                 .title(bikeDetailsEntity.getTitle())
                 .fullImageUrl(bikeDetailsEntity.getUrl())
-                .comments(bikeDetailsEntity.getCommentEntities().stream()
+                .comments(bikeDetailsEntity.getComments().stream()
                     .map(comment ->
                         Comment.builder().comment(comment.getComment()).build()
                     ).collect(Collectors.toList()))

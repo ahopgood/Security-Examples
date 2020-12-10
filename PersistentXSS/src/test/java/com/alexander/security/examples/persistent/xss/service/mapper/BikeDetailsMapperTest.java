@@ -58,7 +58,7 @@ class BikeDetailsMapperTest {
                 .title(title)
                 .description(description)
                 .url(fullUrl)
-                .commentEntities(List.of(CommentEntity.builder()
+                .comments(List.of(CommentEntity.builder()
                         .comment(comment)
                         .id(commentId)
                         .build())).build();
