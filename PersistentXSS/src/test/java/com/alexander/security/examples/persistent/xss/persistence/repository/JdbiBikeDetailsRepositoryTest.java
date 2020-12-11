@@ -2,7 +2,6 @@ package com.alexander.security.examples.persistent.xss.persistence.repository;
 
 import com.alexander.security.examples.persistent.xss.persistence.mapper.JdbiBikeDetailsMapper;
 import com.alexander.security.examples.persistent.xss.persistence.model.BikeDetailsEntity;
-import com.alexander.security.examples.persistent.xss.service.model.BikeDetails;
 import org.jdbi.v3.core.Jdbi;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

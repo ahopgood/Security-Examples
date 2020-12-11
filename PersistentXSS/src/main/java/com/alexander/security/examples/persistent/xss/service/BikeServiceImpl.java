@@ -10,6 +10,7 @@ import com.alexander.security.examples.persistent.xss.service.model.BikeDetails;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,9 +25,9 @@ public class BikeServiceImpl implements BikeService {
 
     @Inject
     public BikeServiceImpl(BikeThumbnailRepository bikeThumbnailRepository,
-                           Mapper<BikeThumbnail, BikeThumbnailEntity> bikeThumbnailMapper,
+                           @Named("serviceBikeThumbnailMapper") Mapper<BikeThumbnail, BikeThumbnailEntity> bikeThumbnailMapper,
                            BikeDetailsRepository bikeDetailsRepository,
-                           Mapper<BikeDetails, BikeDetailsEntity> bikeDetailsMapper) {
+                           @Named("serviceBikeDetailsMapper") Mapper<BikeDetails, BikeDetailsEntity> bikeDetailsMapper) {
         this.bikeThumbnailRepository = bikeThumbnailRepository;
         this.bikeThumbnailMapper = bikeThumbnailMapper;
         this.bikeDetailsRepository = bikeDetailsRepository;

@@ -10,16 +10,11 @@ management:
 
 spring:
   datasource:
-#    jdbc-url: jdbc:h2:mem:testdb;MODE=MySQL
-#    driver-class-name: org.h2.Driver
-#    username: sa
-#    password: password
-#    database-platform: org.hibernate.dialect.H2Dialect
-#    jdbc-url: dbc:hsqldb:hsql://localhost/testdb
-    jdbc-url: jdbc:hsqldb:mem:testdb;DB_CLOSE_DELAY=-1;sql.syntax_mys=true
-#    driver-class-name: org.hsqldb.jdbc.JDBCDriver
+    jdbc-url: jdbc:h2:mem:testdb;MODE=MySQL
+    driver-class-name: org.h2.Driver
     username: sa
-    password:
+    password: password
+    database-platform: org.hibernate.dialect.H2Dialect
 
   flyway:
     locations: "classpath:db/migration"
