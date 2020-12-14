@@ -11,7 +11,9 @@ import com.alexander.security.examples.persistent.xss.service.model.BikeDetails;
 import com.alexander.security.examples.persistent.xss.service.model.BikeThumbnail;
 import com.alexander.security.examples.persistent.xss.persistence.repository.BikeThumbnailRepository;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -116,5 +118,18 @@ class BikeServiceImplTest {
                 .description(description)
                 .url(fullUrl)
                 .build();
+    }
+
+
+    @Test
+    void testGetImage() {
+        ClassPathResource resource = bikeService.getImage("images/large/trekticket20.jpg");
+        assertThat(resource.exists()).isTrue();
+    }
+
+    @Test
+    void testGetImage_givenUnknownPath() {
+        ClassPathResource resource = bikeService.getImage("images/medium/trekticket20.jpg");
+        assertThat(resource.exists()).isFalse();
     }
 }

@@ -7,6 +7,7 @@ import com.alexander.security.examples.persistent.xss.persistence.repository.Bik
 import com.alexander.security.examples.persistent.xss.persistence.repository.BikeThumbnailRepository;
 import com.alexander.security.examples.persistent.xss.service.model.BikeThumbnail;
 import com.alexander.security.examples.persistent.xss.service.model.BikeDetails;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -44,5 +45,10 @@ public class BikeServiceImpl implements BikeService {
         return bikeThumbnailRepository.getBikeThumbnails().stream()
                 .map(bikeThumbnailMapper::map)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ClassPathResource getImage(String path) {
+        return new ClassPathResource(path);
     }
 }

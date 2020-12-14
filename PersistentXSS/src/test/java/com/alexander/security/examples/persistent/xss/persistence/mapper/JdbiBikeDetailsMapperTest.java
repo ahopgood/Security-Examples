@@ -51,7 +51,7 @@ class JdbiBikeDetailsMapperTest {
         assertThat(details.getDescription()).isEqualTo(description);
         assertThat(details.getUrl()).isEqualTo(fullImageUrl);
         assertThat(details.getTitle()).isEqualTo(title);
-        assertThat(details.getComments()).isNotEmpty();
+        assertThat(details.getComments()).hasSize(2);
         assertThat(details.getComments().get(0).getComment()).isEqualTo(comment1);
         assertThat(details.getComments().get(0).getId()).isEqualTo(comment1Id);
     }
