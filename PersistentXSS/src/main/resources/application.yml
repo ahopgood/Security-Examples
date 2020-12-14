@@ -18,3 +18,8 @@ spring:
 
   flyway:
     locations: "classpath:db/migration"
+
+  devtools:
+    restart:
+      additional-paths: "static"
+      trigger-file: "static/index.html"

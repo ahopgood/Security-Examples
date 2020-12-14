@@ -10,10 +10,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
@@ -23,6 +22,7 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.*;
 
+@CrossOrigin
 @RestController
 public class BikesController {
 
@@ -81,7 +81,7 @@ public class BikesController {
                     .body(new InputStreamResource(resource.getInputStream()));
 
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 }
