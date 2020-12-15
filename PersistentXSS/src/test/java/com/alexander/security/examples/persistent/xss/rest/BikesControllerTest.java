@@ -53,7 +53,11 @@ class BikesControllerTest {
     private static final String THUMBNAIL_IMAGE_URL = THUMBNAIL_IMAGE_URL_PREFIX + IMAGE_ID;
     private static final String THUMBNAIL_PATH = THUMBNAIL_IMAGE_PREFIX + IMAGE_ID;
 
+    private static final String COMMENTS_IMAGE_URL = "/bikes/" + BIKE_ID + "/comments/";
+
     private static final String MADEUP_IMAGE_NAME = "madeup.jpg";
+
+    private static final String COMMENT = "{\"comment\":\"Test Comment\"}";
 
     private static final HttpMessageConverter MESSAGE_CONVERTER
             = new MappingJackson2HttpMessageConverter(new ObjectMapper());
@@ -328,5 +332,53 @@ class BikesControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
 
         verify(bikeService, never()).getImage(THUMBNAIL_PATH);
+    }
+
+    @Test
+    void testPostComment() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.post(COMMENTS_IMAGE_URL)
+                        .content(COMMENT)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+
+        verify(bikeService, times(1)).addComment(BIKE_ID, COMMENT);
+    }
+
+    @Test
+    void testPostComment() throws Exception {
+//        mockMvc.perform(
+//                MockMvcRequestBuilders.head(COMMENTS_IMAGE_URL)
+//                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+//                        .accept(MediaType.APPLICATION_JSON_VALUE))
+//                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete(COMMENTS_IMAGE_URL)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch(COMMENTS_IMAGE_URL)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put(COMMENTS_IMAGE_URL)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(COMMENTS_IMAGE_URL)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+
+        verify(bikeService, never()).addComment(BIKE_ID, "");
     }
 }

@@ -21,5 +21,11 @@ spring:
 
   devtools:
     restart:
-      additional-paths: "static"
-      trigger-file: "static/index.html"
+      additional-paths: "static/**"
+#      trigger-file: "static/bikes.js"
+
+# Enables static content to be reloaded when the browser is refreshed, supposedly
+  resources:
+    static-locations:
+      - file:src/main/resources/static/
+      - classpath:/static/

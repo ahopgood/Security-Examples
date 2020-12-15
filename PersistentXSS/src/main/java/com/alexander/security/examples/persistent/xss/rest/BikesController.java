@@ -6,6 +6,7 @@ import com.alexander.security.examples.persistent.xss.rest.model.BikeThumbnailRe
 import com.alexander.security.examples.persistent.xss.service.BikeService;
 import com.alexander.security.examples.persistent.xss.service.model.BikeDetails;
 import com.alexander.security.examples.persistent.xss.service.model.BikeThumbnail;
+import com.mysql.fabric.Response;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
@@ -56,9 +58,14 @@ public class BikesController {
                 bikeDetailsMapper.map(bikeService.getBikeDetails(bikeId))));
     }
 
+    @PostMapping(value = "/bikes/{bikeId}/comments/",
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveComment(@PathVariable("bikeId") String bikeId) {
+        return (ResponseEntity<?>) ResponseEntity.unprocessableEntity();
+    }
+
     @GetMapping(value = "/bikes/images/large/{imageName:.+}",
-            produces = MediaType.IMAGE_JPEG_VALUE
-    )
+            produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<InputStreamResource> getImage(@PathVariable("imageName") String imageName) throws IOException {
         ClassPathResource resource = bikeService.getImage("images/large/" + imageName);
         if (resource.exists()) {
@@ -71,8 +78,7 @@ public class BikesController {
     }
 
     @GetMapping(value = "/bikes/images/small/{imageName:.+}",
-            produces = MediaType.IMAGE_JPEG_VALUE
-    )
+            produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<InputStreamResource> getThumbnailImage(@PathVariable("imageName") String imageName) throws IOException {
         ClassPathResource resource = bikeService.getImage("images/small/" + imageName);
         if (resource.exists()) {
