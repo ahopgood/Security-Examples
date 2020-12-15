@@ -12,8 +12,6 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 
 import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Qualifier;
 import javax.sql.DataSource;
 
 @SpringBootApplication

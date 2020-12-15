@@ -25,7 +25,9 @@ public class JdbiBikeDetailsRepository implements BikeDetailsRepository {
                 handle.createQuery("SELECT bike_details.id, bike_details.bike_id, bike_details.url, bike_details.description, bikes.title, comments.id as comment_id, comments.comment " +
                         "FROM bike_details " +
                         "LEFT JOIN bikes ON bike_details.bike_id = bikes.id " +
-                        "LEFT JOIN comments ON comments.bike_id = bikes.id;")
+                        "LEFT JOIN comments ON comments.bike_id = bikes.id " +
+                        "WHERE bikes.id = :bikeId;")
+                        .bind("bikeId", bikeId)
                 .map(jdbiBikeDetailsMapper)
                         .findOne().get()
         );

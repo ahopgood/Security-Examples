@@ -29,7 +29,7 @@ public class JdbiBikeDetailsMapper implements RowMapper<BikeDetailsEntity> {
         while (rs.next()) {
             comments.add(CommentEntity.builder()
                     .comment(rs.getString(CommentEntity.COMMENT))
-                    .id(rs.getNString(CommentEntity.ID))
+                    .id(rs.getNString(BikeDetailsEntity.COMMENT_ID))
             .build());
         }
         builder.comments(comments);
