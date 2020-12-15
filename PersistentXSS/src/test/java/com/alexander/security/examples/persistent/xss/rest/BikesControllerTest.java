@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -20,15 +19,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.accept.ContentNegotiationManager;
-import org.springframework.web.accept.ContentNegotiationManagerFactoryBean;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -39,6 +33,7 @@ class BikesControllerTest {
 
     private static final String THUMBNAIL_URL = "/bikes/thumbnails";
     private static final String BIKE_ID = "1";
+    private static final String UNKNOWN_ID = "x";
     private static final String DETAIL_URL = "/bikes/detail/" + BIKE_ID;
 
     private static final String IMAGE_ID = "trekticket20.jpg";
@@ -47,17 +42,17 @@ class BikesControllerTest {
     private static final String IMAGES_URL_PREFIX = "/bikes/" + IMAGES_PREFIX;
     private static final String IMAGES_URL = IMAGES_URL_PREFIX + IMAGE_ID;
     private static final String IMAGE_PATH = IMAGES_PREFIX + IMAGE_ID;
+    private static final String MADEUP_IMAGE_NAME = "madeup.jpg";
 
     private static final String THUMBNAIL_IMAGE_PREFIX = "images/small/";
     private static final String THUMBNAIL_IMAGE_URL_PREFIX = "/bikes/" + THUMBNAIL_IMAGE_PREFIX;
     private static final String THUMBNAIL_IMAGE_URL = THUMBNAIL_IMAGE_URL_PREFIX + IMAGE_ID;
     private static final String THUMBNAIL_PATH = THUMBNAIL_IMAGE_PREFIX + IMAGE_ID;
 
-    private static final String COMMENTS_IMAGE_URL = "/bikes/" + BIKE_ID + "/comments/";
+    private static final String COMMENTS_URL = "/bikes/" + BIKE_ID + "/comments/";
+    private static final String COMMENT = "I'm a comment Morty, I'm comment Rick!";
+    private static final String COMMENT_REQUEST = "{\"comment\":\"" + COMMENT + "\"}";
 
-    private static final String MADEUP_IMAGE_NAME = "madeup.jpg";
-
-    private static final String COMMENT = "{\"comment\":\"Test Comment\"}";
 
     private static final HttpMessageConverter MESSAGE_CONVERTER
             = new MappingJackson2HttpMessageConverter(new ObjectMapper());
@@ -69,9 +64,7 @@ class BikesControllerTest {
     private final BikesController controller = new BikesController(bikeService, detailsMapper, thumbnailMapper);
 
     private MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller)
-            .setMessageConverters(MESSAGE_CONVERTER,
-                    new ResourceHttpMessageConverter()
-            )
+            .setMessageConverters(MESSAGE_CONVERTER, new ResourceHttpMessageConverter())
             .setControllerAdvice(ExceptionHandler.class)
             .build();
 
@@ -96,14 +89,21 @@ class BikesControllerTest {
     void setUp() {
         when(bikeService.getBikeThumbnails()).thenReturn(List.of(thumbnail));
         when(bikeService.getBikeDetails(BIKE_ID)).thenReturn(bikeDetails);
+
         when(bikeService.getImage(IMAGE_PATH))
                 .thenReturn(new ClassPathResource(IMAGE_PATH));
-        when(bikeService.getImage(THUMBNAIL_PATH))
-                .thenReturn(new ClassPathResource(THUMBNAIL_PATH));
         when(bikeService.getImage(IMAGES_PREFIX + MADEUP_IMAGE_NAME))
                 .thenReturn(new ClassPathResource(MADEUP_IMAGE_NAME));
+
+        when(bikeService.getImage(THUMBNAIL_PATH))
+                .thenReturn(new ClassPathResource(THUMBNAIL_PATH));
         when(bikeService.getImage(THUMBNAIL_IMAGE_PREFIX + MADEUP_IMAGE_NAME))
                 .thenReturn(new ClassPathResource(MADEUP_IMAGE_NAME));
+
+        when(bikeService.addComment(UNKNOWN_ID, COMMENT))
+                .thenReturn(false);
+        when(bikeService.addComment(BIKE_ID, COMMENT))
+                .thenReturn(true);
 
     }
 
@@ -337,8 +337,21 @@ class BikesControllerTest {
     @Test
     void testPostComment() throws Exception {
         mockMvc.perform(
-                MockMvcRequestBuilders.post(COMMENTS_IMAGE_URL)
-                        .content(COMMENT)
+                MockMvcRequestBuilders.post(COMMENTS_URL)
+                        .content(COMMENT_REQUEST)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        verify(bikeService, times(1)).addComment(BIKE_ID, COMMENT);
+    }
+
+    @Test
+    void testPostComment_givenIdNotFound() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.post(COMMENTS_URL)
+                        .content(COMMENT_REQUEST)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(MockMvcResultHandlers.print())
@@ -348,7 +361,7 @@ class BikesControllerTest {
     }
 
     @Test
-    void testPostComment() throws Exception {
+    void testPostComment_givenWrongVerb() throws Exception {
 //        mockMvc.perform(
 //                MockMvcRequestBuilders.head(COMMENTS_IMAGE_URL)
 //                        .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -356,29 +369,29 @@ class BikesControllerTest {
 //                .andExpect(MockMvcResultMatchers.status().isOk());
 
         mockMvc.perform(
-                MockMvcRequestBuilders.delete(COMMENTS_IMAGE_URL)
+                MockMvcRequestBuilders.delete(COMMENTS_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
 
         mockMvc.perform(
-                MockMvcRequestBuilders.patch(COMMENTS_IMAGE_URL)
+                MockMvcRequestBuilders.patch(COMMENTS_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
 
         mockMvc.perform(
-                MockMvcRequestBuilders.put(COMMENTS_IMAGE_URL)
+                MockMvcRequestBuilders.put(COMMENTS_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get(COMMENTS_IMAGE_URL)
+                MockMvcRequestBuilders.get(COMMENTS_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
 
-        verify(bikeService, never()).addComment(BIKE_ID, "");
+        verify(bikeService, never()).addComment(BIKE_ID, COMMENT);
     }
 }

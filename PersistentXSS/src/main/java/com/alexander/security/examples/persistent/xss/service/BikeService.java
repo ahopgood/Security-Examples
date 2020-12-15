@@ -13,4 +13,6 @@ public interface BikeService {
     List<BikeThumbnail> getBikeThumbnails();
 
     ClassPathResource getImage(String path);
+
+    boolean addComment(String id, String comment);
 }

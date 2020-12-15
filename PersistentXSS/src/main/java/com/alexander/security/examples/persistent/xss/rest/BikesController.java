@@ -3,10 +3,10 @@ package com.alexander.security.examples.persistent.xss.rest;
 import com.alexander.security.examples.persistent.xss.Mapper;
 import com.alexander.security.examples.persistent.xss.rest.model.BikeDetailsResponse;
 import com.alexander.security.examples.persistent.xss.rest.model.BikeThumbnailResponse;
+import com.alexander.security.examples.persistent.xss.rest.model.CommentRequest;
 import com.alexander.security.examples.persistent.xss.service.BikeService;
 import com.alexander.security.examples.persistent.xss.service.model.BikeDetails;
 import com.alexander.security.examples.persistent.xss.service.model.BikeThumbnail;
-import com.mysql.fabric.Response;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
@@ -60,8 +61,12 @@ public class BikesController {
 
     @PostMapping(value = "/bikes/{bikeId}/comments/",
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveComment(@PathVariable("bikeId") String bikeId) {
-        return (ResponseEntity<?>) ResponseEntity.unprocessableEntity();
+    public ResponseEntity saveComment(@PathVariable("bikeId") String bikeId, @RequestBody CommentRequest comment) {
+        if (bikeService.addComment(bikeId, comment.getComment())) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.unprocessableEntity().build();
+        }
     }
 
     @GetMapping(value = "/bikes/images/large/{imageName:.+}",
@@ -87,7 +92,7 @@ public class BikesController {
                     .body(new InputStreamResource(resource.getInputStream()));
 
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
     }
 }

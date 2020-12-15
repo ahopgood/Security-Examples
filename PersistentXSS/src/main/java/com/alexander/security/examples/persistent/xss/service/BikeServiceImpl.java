@@ -51,4 +51,9 @@ public class BikeServiceImpl implements BikeService {
     public ClassPathResource getImage(String path) {
         return new ClassPathResource(path);
     }
+
+    @Override
+    public boolean addComment(String id, String comment) {
+        return false;
+    }
 }
