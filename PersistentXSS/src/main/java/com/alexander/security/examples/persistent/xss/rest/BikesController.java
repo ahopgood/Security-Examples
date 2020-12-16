@@ -65,7 +65,7 @@ public class BikesController {
         if (bikeService.addComment(bikeId, comment.getComment())) {
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.unprocessableEntity().build();
+            return ResponseEntity.notFound().build();
         }
     }
 

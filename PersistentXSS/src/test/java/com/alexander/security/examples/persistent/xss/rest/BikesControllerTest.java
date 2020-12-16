@@ -49,7 +49,9 @@ class BikesControllerTest {
     private static final String THUMBNAIL_IMAGE_URL = THUMBNAIL_IMAGE_URL_PREFIX + IMAGE_ID;
     private static final String THUMBNAIL_PATH = THUMBNAIL_IMAGE_PREFIX + IMAGE_ID;
 
-    private static final String COMMENTS_URL = "/bikes/" + BIKE_ID + "/comments/";
+    private static final String COMMENTS_URL = "/bikes/%s/comments/";
+    private static final String INVALID_COMMENTS_URL = String.format(COMMENTS_URL, UNKNOWN_ID);
+    private static final String VALID_COMMENTS_URL = String.format(COMMENTS_URL, BIKE_ID);
     private static final String COMMENT = "I'm a comment Morty, I'm comment Rick!";
     private static final String COMMENT_REQUEST = "{\"comment\":\"" + COMMENT + "\"}";
 
@@ -337,7 +339,7 @@ class BikesControllerTest {
     @Test
     void testPostComment() throws Exception {
         mockMvc.perform(
-                MockMvcRequestBuilders.post(COMMENTS_URL)
+                MockMvcRequestBuilders.post(VALID_COMMENTS_URL)
                         .content(COMMENT_REQUEST)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
@@ -350,44 +352,44 @@ class BikesControllerTest {
     @Test
     void testPostComment_givenIdNotFound() throws Exception {
         mockMvc.perform(
-                MockMvcRequestBuilders.post(COMMENTS_URL)
+                MockMvcRequestBuilders.post(INVALID_COMMENTS_URL)
                         .content(COMMENT_REQUEST)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
 
-        verify(bikeService, times(1)).addComment(BIKE_ID, COMMENT);
+        verify(bikeService, times(1)).addComment(UNKNOWN_ID, COMMENT);
     }
 
     @Test
     void testPostComment_givenWrongVerb() throws Exception {
 //        mockMvc.perform(
-//                MockMvcRequestBuilders.head(COMMENTS_IMAGE_URL)
+//                MockMvcRequestBuilders.head(VALID_COMMENTS_URL)
 //                        .contentType(MediaType.APPLICATION_JSON_VALUE)
 //                        .accept(MediaType.APPLICATION_JSON_VALUE))
 //                .andExpect(MockMvcResultMatchers.status().isOk());
 
         mockMvc.perform(
-                MockMvcRequestBuilders.delete(COMMENTS_URL)
+                MockMvcRequestBuilders.delete(VALID_COMMENTS_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
 
         mockMvc.perform(
-                MockMvcRequestBuilders.patch(COMMENTS_URL)
+                MockMvcRequestBuilders.patch(VALID_COMMENTS_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
 
         mockMvc.perform(
-                MockMvcRequestBuilders.put(COMMENTS_URL)
+                MockMvcRequestBuilders.put(VALID_COMMENTS_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get(COMMENTS_URL)
+                MockMvcRequestBuilders.get(VALID_COMMENTS_URL)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());

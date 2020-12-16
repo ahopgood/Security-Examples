@@ -14,8 +14,8 @@ class CommentRequestTest {
     }
 
     private static final String COMMENT = "I'm a comment Morty, I'm comment Rick!";
-//    private static final String COMMENT_REQUEST = "{\"comment\":\"" + COMMENT + "\"}";
-    private static final String COMMENT_REQUEST = "{\"comment\":\"I'm a comment Morty! I'm comment Rick!\"}";
+    private static final String COMMENT_REQUEST = "{\"comment\":\"" + COMMENT + "\"}";
+
     @Test
     void testReadValue() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
