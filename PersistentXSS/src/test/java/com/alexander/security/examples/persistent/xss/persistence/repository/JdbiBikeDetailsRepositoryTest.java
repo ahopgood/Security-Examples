@@ -63,4 +63,16 @@ class JdbiBikeDetailsRepositoryTest {
         assertThat(details.getComments().get(0).getId()).isEqualTo("c21");
         assertThat(details.getComments().get(0).getComment()).isEqualTo("This was one of the first bikes that was stolen from me");
     }
+
+    @Test
+    void testAddComment() {
+        String comment = "I'm a comment Morty, I'm comment Rick!";
+        String bikeId = "b1";
+        bikeDetailsRepository = new JdbiBikeDetailsRepository(jdbi, jdbiBikeDetailsMapper);
+        bikeDetailsRepository.addComment(bikeId, comment);
+
+        BikeDetailsEntity details = bikeDetailsRepository.getBikeDetails(bikeId);
+        assertThat(details.getComments()).hasSize(3);
+        assertThat(details.getComments().get(2).getComment()).isEqualTo(comment);
+    }
 }

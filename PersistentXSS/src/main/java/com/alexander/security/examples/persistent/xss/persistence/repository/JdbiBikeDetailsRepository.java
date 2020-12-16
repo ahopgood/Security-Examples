@@ -34,7 +34,14 @@ public class JdbiBikeDetailsRepository implements BikeDetailsRepository {
     }
 
     @Override
-    public boolean addComment(String bikeId, String comment) {
-        return false;
+    public int addComment(String bikeId, String comment) {
+        return jdbi.withHandle( handle ->
+                handle.createUpdate("INSERT INTO COMMENTS (id, bike_id, comment) " +
+                        "VALUES " +
+                        "(UUID(), :bikeId, :comment);")
+                        .bind("bikeId", bikeId)
+                        .bind("comment", comment)
+                        .execute()
+        );
     }
 }

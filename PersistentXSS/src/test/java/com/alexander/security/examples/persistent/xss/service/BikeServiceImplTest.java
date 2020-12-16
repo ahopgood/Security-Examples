@@ -135,13 +135,13 @@ class BikeServiceImplTest {
 
     @Test
     void testAddComment() {
-        when(detailsRepository.addComment(bikeId, comment)).thenReturn(true);
+        when(detailsRepository.addComment(bikeId, comment)).thenReturn(1);
         assertThat(bikeService.addComment(bikeId, comment)).isTrue();
     }
 
     @Test
     void testAddComment_givenUnknownBike() {
-        when(detailsRepository.addComment(unknownId, comment)).thenReturn(false);
+        when(detailsRepository.addComment(unknownId, comment)).thenReturn(0);
         assertThat(bikeService.addComment(unknownId, comment)).isFalse();
     }
 }

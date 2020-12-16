@@ -54,6 +54,6 @@ public class BikeServiceImpl implements BikeService {
 
     @Override
     public boolean addComment(String id, String comment) {
-        return bikeDetailsRepository.addComment(id, comment);
+        return bikeDetailsRepository.addComment(id, comment) > 0;
     }
 }

@@ -6,5 +6,5 @@ public interface BikeDetailsRepository {
 
     BikeDetailsEntity getBikeDetails(String bikeId);
 
-    boolean addComment(String bikeId, String comment);
+    int addComment(String bikeId, String comment);
 }
