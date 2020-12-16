@@ -5,4 +5,6 @@ import com.alexander.security.examples.persistent.xss.persistence.model.BikeDeta
 public interface BikeDetailsRepository {
 
     BikeDetailsEntity getBikeDetails(String bikeId);
+
+    boolean addComment(String bikeId, String comment);
 }

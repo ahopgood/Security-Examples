@@ -13,7 +13,6 @@ import com.alexander.security.examples.persistent.xss.persistence.repository.Bik
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,10 +34,16 @@ class BikeServiceImplTest {
             detailsRepository,
             bikeDetailsMapper);
 
+    private final String bikeId = "b1";
+    private final String unknownId = "x";
     private final String commentId = "c1";
     private final String comment = "I rode this bike until it broke";
     private final String description = "A hard tail bike perfect for trails";
     private final String fullUrl = "large/trekticket20.png";
+
+    private final String thumbnailId = "t1";
+    private final String url = "small/trekticket20.png";
+    private final String title = "Trek Ticket 20";
 
     @Test
     void testGetBikeDetails_whenIdDoesNotExist_thenReturnNull() {
@@ -46,8 +51,8 @@ class BikeServiceImplTest {
 
     @Test
     void testGetBikeDetails_whenNoComments() {
-        when(detailsRepository.getBikeDetails("b1")).thenReturn(getBikeDetailsEntity());
-        BikeDetails details = bikeService.getBikeDetails("b1");
+        when(detailsRepository.getBikeDetails(bikeId)).thenReturn(getBikeDetailsEntity());
+        BikeDetails details = bikeService.getBikeDetails(bikeId);
         assertThat(details.getBikeId()).isEqualTo(bikeId);
         assertThat(details.getBikeDescription()).isEqualTo(description);
         assertThat(details.getFullImageUrl()).isEqualTo(fullUrl);
@@ -60,8 +65,8 @@ class BikeServiceImplTest {
 
     @Test
     void testGetBikeDetails_whenNoComments_thenReturnEmptyList() {
-        when(detailsRepository.getBikeDetails("b1")).thenReturn(getBikeDetailsEntityWithNoComments());
-        BikeDetails details = bikeService.getBikeDetails("b1");
+        when(detailsRepository.getBikeDetails(bikeId)).thenReturn(getBikeDetailsEntityWithNoComments());
+        BikeDetails details = bikeService.getBikeDetails(bikeId);
         assertThat(details.getBikeId()).isEqualTo(bikeId);
         assertThat(details.getBikeDescription()).isEqualTo(description);
         assertThat(details.getFullImageUrl()).isEqualTo(fullUrl);
@@ -84,11 +89,6 @@ class BikeServiceImplTest {
 
         verify(thumbnailRepository, times(1)).getBikeThumbnails();
     }
-
-    private final String bikeId = "b1";
-    private final String thumbnailId = "t1";
-    private final String url = "small/trekticket20.png";
-    private final String title = "Trek Ticket 20";
 
     private BikeThumbnailEntity getBikeThumbnailEntity() {
         return BikeThumbnailEntity.builder()
@@ -131,5 +131,17 @@ class BikeServiceImplTest {
     void testGetImage_givenUnknownPath() {
         ClassPathResource resource = bikeService.getImage("images/medium/trekticket20.jpg");
         assertThat(resource.exists()).isFalse();
+    }
+
+    @Test
+    void testAddComment() {
+        when(detailsRepository.addComment(bikeId, comment)).thenReturn(true);
+        assertThat(bikeService.addComment(bikeId, comment)).isTrue();
+    }
+
+    @Test
+    void testAddComment_givenUnknownBike() {
+        when(detailsRepository.addComment(unknownId, comment)).thenReturn(false);
+        assertThat(bikeService.addComment(unknownId, comment)).isFalse();
     }
 }

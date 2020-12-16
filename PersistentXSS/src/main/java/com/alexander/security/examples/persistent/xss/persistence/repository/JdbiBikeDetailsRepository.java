@@ -32,4 +32,9 @@ public class JdbiBikeDetailsRepository implements BikeDetailsRepository {
                         .findOne().get()
         );
     }
+
+    @Override
+    public boolean addComment(String bikeId, String comment) {
+        return false;
+    }
 }
