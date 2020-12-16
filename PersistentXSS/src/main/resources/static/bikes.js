@@ -70,7 +70,7 @@ function createThumbnails() {
             var thumbnail = json;
             var bikeId = thumbnail.bikeId;
             var template = $("#template").clone().attr("id", bikeId).toggleClass("invisible")
-            $("body div.container .card-group").append(template);
+            $("body div.container .card-group.row").append(template);
             $("#" + bikeId + " img").attr("src", host + thumbnail.thumbnailImageUrl);
             $("#" + bikeId + " div.card-body h5").html(thumbnail.title);
             $("#" + bikeId + " div.card-body a").attr("href", "#bike-details")
