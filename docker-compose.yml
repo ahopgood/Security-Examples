@@ -1,0 +1,7 @@
+version: "2"
+services:
+  persistent-xss:
+    image: insecure:1
+    container_name: persistent-xss
+    ports:
+      - 8080:8080
