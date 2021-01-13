@@ -75,7 +75,7 @@ function createThumbnails() {
             $("#" + bikeId + " img").attr("src", host + thumbnail.thumbnailImageUrl);
             $("#" + bikeId + " div.card-body h5").html(thumbnail.title);
             $("#" + bikeId + " div.card-body a").attr("href", "#bike-details")
-            $("#" + bikeId + " div.card-body a").click(bikeId, populateDetails);
+            $("#" + bikeId + " div.card-footer a").click(bikeId, populateDetails);
         }); //end each
     }); //ajax end
 }
