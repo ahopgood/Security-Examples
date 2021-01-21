@@ -1,0 +1,1 @@
+docker build -t persistent-xss:$(date "+%Y%m%d-%H%M") -t persistent-xss:latest .
