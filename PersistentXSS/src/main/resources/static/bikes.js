@@ -39,6 +39,7 @@ function populateDetails(event) {
     }).done(function (json) {
 //        console.log(json);
         var details = json;
+        $("#details").removeClass("d-none");
         $("#details-template #details-header").html(details.title);
         $("#details-template div img").attr("src", host + details.fullImageUrl);
         $("#details-template .card-text").html(details.bikeDescription);
@@ -69,12 +70,12 @@ function createThumbnails() {
 //            console.log(json);
             var thumbnail = json;
             var bikeId = thumbnail.bikeId;
-            var template = $("#template").clone().attr("id", bikeId).toggleClass("invisible")
+            var template = $("#template").clone().attr("id", bikeId).toggleClass("d-none");
             $("body div.container .card-group.row").append(template);
             $("#" + bikeId + " img").attr("src", host + thumbnail.thumbnailImageUrl);
             $("#" + bikeId + " div.card-body h5").html(thumbnail.title);
             $("#" + bikeId + " div.card-body a").attr("href", "#bike-details")
-            $("#" + bikeId + " div.card-body a").click(bikeId, populateDetails);
+            $("#" + bikeId + " div.card-footer a").click(bikeId, populateDetails);
         }); //end each
     }); //ajax end
 }

@@ -31,12 +31,12 @@ public class BikesController {
 
 
     private final BikeService bikeService;
-    private final Mapper<BikeDetailsResponse, BikeDetails> bikeDetailsMapper;
+    private final Mapper<Optional<BikeDetailsResponse>, Optional<BikeDetails>> bikeDetailsMapper;
     private final Mapper<BikeThumbnailResponse, BikeThumbnail> bikeThumbnailMapper;
 
     @Inject
     public BikesController(BikeService bikeService,
-                           Mapper<BikeDetailsResponse, BikeDetails> bikeDetailsMapper,
+                           Mapper<Optional<BikeDetailsResponse>, Optional<BikeDetails>> bikeDetailsMapper,
                            Mapper<BikeThumbnailResponse, BikeThumbnail> bikeThumbnailMapper) {
         this.bikeService = bikeService;
         this.bikeDetailsMapper = bikeDetailsMapper;
@@ -55,8 +55,8 @@ public class BikesController {
     @GetMapping(value = "/bikes/detail/{bikeId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BikeDetailsResponse> getBikeDetails(@PathVariable("bikeId") String bikeId) {
-        return ResponseEntity.of(Optional.ofNullable(
-                bikeDetailsMapper.map(bikeService.getBikeDetails(bikeId))));
+        return ResponseEntity.of(
+                bikeDetailsMapper.map(bikeService.getBikeDetails(bikeId)));
     }
 
     @PostMapping(value = "/bikes/{bikeId}/comments/",

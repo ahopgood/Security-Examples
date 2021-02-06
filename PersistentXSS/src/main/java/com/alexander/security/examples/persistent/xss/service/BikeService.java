@@ -5,10 +5,11 @@ import com.alexander.security.examples.persistent.xss.service.model.BikeDetails;
 import org.springframework.core.io.ClassPathResource;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BikeService {
 
-    BikeDetails getBikeDetails(String id);
+    Optional<BikeDetails> getBikeDetails(String id);
 
     List<BikeThumbnail> getBikeThumbnails();
 

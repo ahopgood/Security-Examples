@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -80,12 +81,12 @@ class BikesControllerTest {
 
     private final String fullImageUrl = "https://dirtybikes.com/images/large/trekticket20.png";
     private final String description = "What a bouncer";
-    private final BikeDetails bikeDetails = BikeDetails.builder()
+    private final Optional<BikeDetails> bikeDetails = Optional.of(BikeDetails.builder()
             .bikeId(BIKE_ID)
             .title(title)
             .fullImageUrl(fullImageUrl)
             .bikeDescription(description)
-            .build();
+            .build());
 
     @BeforeEach
     void setUp() {

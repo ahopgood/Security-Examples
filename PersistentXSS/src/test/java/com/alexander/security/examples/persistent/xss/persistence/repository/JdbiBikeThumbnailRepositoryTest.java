@@ -34,6 +34,6 @@ class JdbiBikeThumbnailRepositoryTest {
         assertThat(thumbnail.getId()).isEqualTo("t1");
         assertThat(thumbnail.getBikeId()).isEqualTo("b1");
         assertThat(thumbnail.getTitle()).isEqualTo("Trek Ticket 20");
-        assertThat(thumbnail.getThumbnailImageUrl()).isEqualTo("thumb/trekticket20.png");
+        assertThat(thumbnail.getThumbnailImageUrl()).isEqualTo("bikes/images/small/trekticket20.jpg");
     }
 }

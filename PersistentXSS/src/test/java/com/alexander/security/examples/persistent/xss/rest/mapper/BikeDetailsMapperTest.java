@@ -6,6 +6,7 @@ import com.alexander.security.examples.persistent.xss.service.model.Comment;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,7 +23,8 @@ class BikeDetailsMapperTest {
 
     @Test
     void testMap_givenNoComments_thenEmptyArray() {
-        BikeDetailsResponse restBikeDetailsResponse = mapper.map(getNoCommentBikeDetails());
+        Optional<BikeDetailsResponse> restBikeDetailsResponseOptional = mapper.map(getNoCommentBikeDetails());
+        BikeDetailsResponse restBikeDetailsResponse = restBikeDetailsResponseOptional.get();
         assertThat(restBikeDetailsResponse.getTitle()).isEqualTo(title);
         assertThat(restBikeDetailsResponse.getBikeDescription()).isEqualTo(description);
         assertThat(restBikeDetailsResponse.getBikeId()).isEqualTo(bikeId);
@@ -34,7 +36,8 @@ class BikeDetailsMapperTest {
 
     @Test
     void testMap_givenComments_thenMapIntoArray() {
-        BikeDetailsResponse restBikeDetailsResponse = mapper.map(getBikeDetails());
+        Optional<BikeDetailsResponse> restBikeDetailsResponseOptional = mapper.map(getBikeDetails());
+        BikeDetailsResponse restBikeDetailsResponse = restBikeDetailsResponseOptional.get();
         assertThat(restBikeDetailsResponse.getTitle()).isEqualTo(title);
         assertThat(restBikeDetailsResponse.getBikeDescription()).isEqualTo(description);
         assertThat(restBikeDetailsResponse.getBikeId()).isEqualTo(bikeId);
@@ -47,8 +50,8 @@ class BikeDetailsMapperTest {
         assertThat(restBikeDetailsResponse.getComments().get(1).getComment()).isEqualTo(comment2);
     }
 
-    public BikeDetails getBikeDetails() {
-        return BikeDetails.builder()
+    public Optional<BikeDetails> getBikeDetails() {
+        return Optional.of(BikeDetails.builder()
                 .bikeDescription(description)
                 .fullImageUrl(fullImageUrl)
                 .title(title)
@@ -62,15 +65,15 @@ class BikeDetailsMapperTest {
                                         .comment(comment2)
                                         .build())
                 )
-                .build();
+                .build());
     }
 
-    public BikeDetails getNoCommentBikeDetails() {
-        return BikeDetails.builder()
+    public Optional<BikeDetails> getNoCommentBikeDetails() {
+        return Optional.of(BikeDetails.builder()
                 .bikeDescription(description)
                 .fullImageUrl(fullImageUrl)
                 .title(title)
                 .bikeId(bikeId)
-                .build();
+                .build());
     }
 }

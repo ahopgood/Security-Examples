@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -27,7 +28,7 @@ class BikeServiceImplTest {
     private Mapper<BikeThumbnail, BikeThumbnailEntity> bikeThumbnailMapper = new BikeThumbnailMapper();
 
     private BikeDetailsRepository detailsRepository = mock(BikeDetailsRepository.class);
-    private Mapper<BikeDetails, BikeDetailsEntity> bikeDetailsMapper = new BikeDetailsMapper();
+    private Mapper<Optional<BikeDetails>, Optional<BikeDetailsEntity>> bikeDetailsMapper = new BikeDetailsMapper();
 
     private BikeService bikeService = new BikeServiceImpl(thumbnailRepository,
             bikeThumbnailMapper,
@@ -52,7 +53,8 @@ class BikeServiceImplTest {
     @Test
     void testGetBikeDetails_whenNoComments() {
         when(detailsRepository.getBikeDetails(bikeId)).thenReturn(getBikeDetailsEntity());
-        BikeDetails details = bikeService.getBikeDetails(bikeId);
+        Optional<BikeDetails> detailsOptional = bikeService.getBikeDetails(bikeId);
+        BikeDetails details = detailsOptional.get();
         assertThat(details.getBikeId()).isEqualTo(bikeId);
         assertThat(details.getBikeDescription()).isEqualTo(description);
         assertThat(details.getFullImageUrl()).isEqualTo(fullUrl);
@@ -66,7 +68,8 @@ class BikeServiceImplTest {
     @Test
     void testGetBikeDetails_whenNoComments_thenReturnEmptyList() {
         when(detailsRepository.getBikeDetails(bikeId)).thenReturn(getBikeDetailsEntityWithNoComments());
-        BikeDetails details = bikeService.getBikeDetails(bikeId);
+        Optional<BikeDetails> bikeDetailsOptional = bikeService.getBikeDetails(bikeId);
+        BikeDetails details = bikeDetailsOptional.get();
         assertThat(details.getBikeId()).isEqualTo(bikeId);
         assertThat(details.getBikeDescription()).isEqualTo(description);
         assertThat(details.getFullImageUrl()).isEqualTo(fullUrl);
@@ -99,8 +102,8 @@ class BikeServiceImplTest {
                 .build();
     }
 
-    private BikeDetailsEntity getBikeDetailsEntity() {
-        return BikeDetailsEntity.builder()
+    private Optional<BikeDetailsEntity> getBikeDetailsEntity() {
+        return Optional.of(BikeDetailsEntity.builder()
                 .bikeId(bikeId)
                 .title(title)
                 .description(description)
@@ -108,16 +111,16 @@ class BikeServiceImplTest {
                 .comments(List.of(CommentEntity.builder()
                         .comment(comment)
                         .id(commentId)
-                        .build())).build();
+                        .build())).build());
     }
 
-    private BikeDetailsEntity getBikeDetailsEntityWithNoComments() {
-        return BikeDetailsEntity.builder()
+    private Optional<BikeDetailsEntity> getBikeDetailsEntityWithNoComments() {
+        return Optional.of(BikeDetailsEntity.builder()
                 .bikeId(bikeId)
                 .title(title)
                 .description(description)
                 .url(fullUrl)
-                .build();
+                .build());
     }
 
 
