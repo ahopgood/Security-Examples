@@ -8,6 +8,7 @@ import com.alexander.security.examples.persistent.xss.service.model.BikeDetails;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,11 +21,12 @@ class BikeDetailsMapperTest {
     private final String description = "A hard tail bike perfect for trails";
     private final String fullUrl = "large/trekticket20.png";
 
-    private Mapper<BikeDetails, BikeDetailsEntity> mapper = new BikeDetailsMapper();
+    private Mapper<Optional<BikeDetails>, Optional<BikeDetailsEntity>> mapper = new BikeDetailsMapper();
 
     @Test
     void testMap() {
-        BikeDetails details = mapper.map(getBikeDetailsEntity());
+        Optional<BikeDetails> detailsOptional = mapper.map(getBikeDetailsEntity());
+        BikeDetails details = detailsOptional.get();
         assertThat(details.getBikeId()).isEqualTo(bikeId);
         assertThat(details.getBikeDescription()).isEqualTo(description);
         assertThat(details.getFullImageUrl()).isEqualTo(fullUrl);
@@ -35,7 +37,8 @@ class BikeDetailsMapperTest {
 
     @Test
     void testMap_givenNoComments() {
-        BikeDetails details = mapper.map(getBikeDetailsEntityWithNoComments());
+        Optional<BikeDetails> detailsOptional = mapper.map(getBikeDetailsEntityWithNoComments());
+        BikeDetails details = detailsOptional.get();
         assertThat(details.getBikeId()).isEqualTo(bikeId);
         assertThat(details.getBikeDescription()).isEqualTo(description);
         assertThat(details.getFullImageUrl()).isEqualTo(fullUrl);
@@ -43,17 +46,17 @@ class BikeDetailsMapperTest {
         assertThat(details.getComments()).isEmpty();
     }
 
-    private BikeDetailsEntity getBikeDetailsEntityWithNoComments() {
-        return BikeDetailsEntity.builder()
+    private Optional<BikeDetailsEntity> getBikeDetailsEntityWithNoComments() {
+        return Optional.of(BikeDetailsEntity.builder()
                 .bikeId(bikeId)
                 .title(title)
                 .description(description)
                 .url(fullUrl)
-                .build();
+                .build());
     }
 
-    private BikeDetailsEntity getBikeDetailsEntity() {
-        return BikeDetailsEntity.builder()
+    private Optional<BikeDetailsEntity> getBikeDetailsEntity() {
+        return Optional.of(BikeDetailsEntity.builder()
                 .bikeId(bikeId)
                 .title(title)
                 .description(description)
@@ -61,6 +64,7 @@ class BikeDetailsMapperTest {
                 .comments(List.of(CommentEntity.builder()
                         .comment(comment)
                         .id(commentId)
-                        .build())).build();
+                        .build()))
+                .build());
     }
 }

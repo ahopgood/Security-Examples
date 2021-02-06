@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,13 +23,13 @@ public class BikeServiceImpl implements BikeService {
     private final Mapper<BikeThumbnail, BikeThumbnailEntity> bikeThumbnailMapper;
 
     private final BikeDetailsRepository bikeDetailsRepository;
-    private final Mapper<BikeDetails, BikeDetailsEntity> bikeDetailsMapper;
+    private final Mapper<Optional<BikeDetails>, Optional<BikeDetailsEntity>> bikeDetailsMapper;
 
     @Inject
     public BikeServiceImpl(BikeThumbnailRepository bikeThumbnailRepository,
                            @Named("serviceBikeThumbnailMapper") Mapper<BikeThumbnail, BikeThumbnailEntity> bikeThumbnailMapper,
                            BikeDetailsRepository bikeDetailsRepository,
-                           @Named("serviceBikeDetailsMapper") Mapper<BikeDetails, BikeDetailsEntity> bikeDetailsMapper) {
+                           @Named("serviceBikeDetailsMapper") Mapper<Optional<BikeDetails>, Optional<BikeDetailsEntity>> bikeDetailsMapper) {
         this.bikeThumbnailRepository = bikeThumbnailRepository;
         this.bikeThumbnailMapper = bikeThumbnailMapper;
         this.bikeDetailsRepository = bikeDetailsRepository;
@@ -36,7 +37,7 @@ public class BikeServiceImpl implements BikeService {
     }
 
     @Override
-    public BikeDetails getBikeDetails(String id) {
+    public Optional<BikeDetails> getBikeDetails(String id) {
         return bikeDetailsMapper.map(bikeDetailsRepository.getBikeDetails(id));
     }
 

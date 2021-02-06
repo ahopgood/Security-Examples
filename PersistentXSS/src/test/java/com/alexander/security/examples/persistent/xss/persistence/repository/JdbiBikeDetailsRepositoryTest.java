@@ -2,6 +2,7 @@ package com.alexander.security.examples.persistent.xss.persistence.repository;
 
 import com.alexander.security.examples.persistent.xss.persistence.mapper.JdbiBikeDetailsMapper;
 import com.alexander.security.examples.persistent.xss.persistence.model.BikeDetailsEntity;
+import com.alexander.security.examples.persistent.xss.service.model.BikeDetails;
 import org.jdbi.v3.core.Jdbi;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @JdbcTest
 @ExtendWith(SpringExtension.class)
@@ -28,11 +32,10 @@ class JdbiBikeDetailsRepositoryTest {
         assertThat(jdbi).isNotNull();
         assertThat(bikeDetailsRepository).isNotNull();
 
-//        Optional<BikeDetailsEntity> detailsOpt = bikeDetailsRepository.getBikeDetails("b1");
-//        assertThat(detailsOpt.isPresent()).isTrue();
+        Optional<BikeDetailsEntity> detailsOptional = bikeDetailsRepository.getBikeDetails("b1");
+        assertThat(detailsOptional.isPresent()).isTrue();
 
-//        BikeDetailsEntity details = detailsOpt.get();
-        BikeDetailsEntity details = bikeDetailsRepository.getBikeDetails("b1");
+        BikeDetailsEntity details = detailsOptional.get();
         assertThat(details.getBikeId()).isEqualTo("b1");
         assertThat(details.getDescription()).isEqualTo("A hard tail bike perfect for trails");
         assertThat(details.getUrl()).isEqualTo("bikes/images/large/trekticket20.jpg");
@@ -45,16 +48,26 @@ class JdbiBikeDetailsRepositoryTest {
     }
 
     @Test
+    void testGetBikeDetails_givenIdNotFound() {
+        bikeDetailsRepository = new JdbiBikeDetailsRepository(jdbi, jdbiBikeDetailsMapper);
+        assertThat(jdbi).isNotNull();
+        assertThat(bikeDetailsRepository).isNotNull();
+
+        Optional<BikeDetailsEntity> detailsOptional = bikeDetailsRepository.getBikeDetails("b10");
+        assertThat(detailsOptional.isPresent()).isFalse();
+
+    }
+
+    @Test
     void testGetBikeDetails_bySpecificId() {
         bikeDetailsRepository = new JdbiBikeDetailsRepository(jdbi, jdbiBikeDetailsMapper);
         assertThat(jdbi).isNotNull();
         assertThat(bikeDetailsRepository).isNotNull();
 
-//        Optional<BikeDetailsEntity> detailsOpt = bikeDetailsRepository.getBikeDetails("b1");
-//        assertThat(detailsOpt.isPresent()).isTrue();
+        Optional<BikeDetailsEntity> detailsOptional = bikeDetailsRepository.getBikeDetails("b2");
+        assertThat(detailsOptional.isPresent()).isTrue();
 
-//        BikeDetailsEntity details = detailsOpt.get();
-        BikeDetailsEntity details = bikeDetailsRepository.getBikeDetails("b2");
+        BikeDetailsEntity details = detailsOptional.get();
         assertThat(details.getBikeId()).isEqualTo("b2");
 //        assertThat(details.getDescription()).isEqualTo("A hard tail bike perfect for trails");
 //        assertThat(details.getUrl()).isEqualTo("bikes/images/large/trekticket20.png");
@@ -71,7 +84,10 @@ class JdbiBikeDetailsRepositoryTest {
         bikeDetailsRepository = new JdbiBikeDetailsRepository(jdbi, jdbiBikeDetailsMapper);
         bikeDetailsRepository.addComment(bikeId, comment);
 
-        BikeDetailsEntity details = bikeDetailsRepository.getBikeDetails(bikeId);
+        Optional<BikeDetailsEntity> detailsOptional = bikeDetailsRepository.getBikeDetails(bikeId);
+        assertThat(detailsOptional.isPresent()).isTrue();
+
+        BikeDetailsEntity details = detailsOptional.get();
         assertThat(details.getComments()).hasSize(3);
         assertThat(details.getComments().get(2).getComment()).isEqualTo(comment);
     }
