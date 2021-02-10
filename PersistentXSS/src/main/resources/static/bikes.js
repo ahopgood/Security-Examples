@@ -6,8 +6,8 @@ var host = "http://localhost:8080/"
 
 function submitComment(event) {
     var bikeId = event.data;
-//    console.log("I'm a submit comment click event for " + bikeId);
     var commentContent = $("#commentTextArea").val();
+    console.log("I'm a submit comment click event for " + bikeId + " with comment:[" + commentContent + "]");
 //    console.log(commentContent);
     jQuery.ajax({
             url: host + "bikes/" + bikeId + "/comments/",
@@ -20,10 +20,14 @@ function submitComment(event) {
 //                    console.log("Call completed for " + bikeId);
                     var loadEvent = jQuery.Event( "madeup" );
                     loadEvent.data = bikeId;
-                    $("#commentSubmit").off("click");
+                    $("#commentTextArea").val("");
                     populateDetails(loadEvent);
                 }
             }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+             console.log("Uh oh we have a failure in submitting comments: " + jqXHR.textStatus);
+             console.log(errorThrown);
+             console.log(jqXHR.responseJSON);
         });
 }
 
@@ -32,6 +36,11 @@ function populateDetails(event) {
 //    console.log(event);
 //    console.log(event.data);
     var bikeId = event.data;
+    //Setup comment submit actions
+    $("#commentSubmit").off("click");
+    event.stopPropagation();
+    $("#commentSubmit").click(bikeId, submitComment);
+
     jQuery.ajax({
         url: host + "bikes/detail/" + bikeId,
         type: "GET",
@@ -46,16 +55,18 @@ function populateDetails(event) {
 
         $("ul.list-group").empty();
         var commentTemplate = '<li class="list-group-item"></li>';
+        console.log(json.comments);
         jQuery.each( details.comments, function( index, comment ){
             var commentTemplate = comment;
-//            console.log(comment);
+            console.log("Comment " + index + ": ");
+            console.log(comment);
             $("ul.list-group").append("<li class=\"list-group-item\"></li>")
             $("ul.list-group li.list-group-item:last").html(comment.comment);
         });
+    })
+    .fail(function(jqXHR) {
+        console.log("Uh oh we have a failure populating the details: " + jqXHR.status);
     }); //ajax end
-
-    //Setup comment submit actions
-    $("#commentSubmit").click(bikeId, submitComment);
 }
 
 function createThumbnails() {
