@@ -7,6 +7,8 @@ import com.alexander.security.examples.persistent.xss.rest.model.CommentRequest;
 import com.alexander.security.examples.persistent.xss.service.BikeService;
 import com.alexander.security.examples.persistent.xss.service.model.BikeDetails;
 import com.alexander.security.examples.persistent.xss.service.model.BikeThumbnail;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -33,7 +35,7 @@ public class BikesController {
     private final BikeService bikeService;
     private final Mapper<Optional<BikeDetailsResponse>, Optional<BikeDetails>> bikeDetailsMapper;
     private final Mapper<BikeThumbnailResponse, BikeThumbnail> bikeThumbnailMapper;
-
+    private final Logger logger = LoggerFactory.getLogger(BikesController.class);
     @Inject
     public BikesController(BikeService bikeService,
                            Mapper<Optional<BikeDetailsResponse>, Optional<BikeDetails>> bikeDetailsMapper,
@@ -55,15 +57,20 @@ public class BikesController {
     @GetMapping(value = "/bikes/detail/{bikeId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BikeDetailsResponse> getBikeDetails(@PathVariable("bikeId") String bikeId) {
+        logger.info("/bikes/detail/{}", bikeId);
         return ResponseEntity.of(
                 bikeDetailsMapper.map(bikeService.getBikeDetails(bikeId)));
     }
 
     @PostMapping(value = "/bikes/{bikeId}/comments/",
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity saveComment(@PathVariable("bikeId") String bikeId, @RequestBody CommentRequest comment) {
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> saveComment(@PathVariable("bikeId") String bikeId, @RequestBody CommentRequest comment) {
+        logger.info("/bikes/{}/comments/", bikeId);
+        logger.info("Comment: {}", comment.getComment());
         if (bikeService.addComment(bikeId, comment.getComment())) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok()
+                    .body("{}");
         } else {
             return ResponseEntity.notFound().build();
         }
