@@ -29,3 +29,8 @@ spring:
     static-locations:
       - file:src/main/resources/static/
       - classpath:/static/
+
+security:
+  csp:
+    enabled: false
+    policy: "default-src 'self'"
