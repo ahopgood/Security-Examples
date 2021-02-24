@@ -30,9 +30,9 @@ public class ContentSecurityPolicy implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
-        LOGGER.info("CSP is enabled:{}", enabled);
+        LOGGER.debug("CSP is enabled:{}", enabled);
         if (enabled) {
-            LOGGER.info("CSP is set:{}", policy);
+            LOGGER.debug("CSP is set:{}", policy);
             response.addHeader(CSP_HEADER, policy);
         }
     }
