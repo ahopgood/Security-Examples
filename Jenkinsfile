@@ -8,6 +8,18 @@ pipeline {
                 sh 'mvn clean install'
             }
 	    }
+	    stage('docker build') {
+	        agent { label 'Docker' }
+	        parallel {
+                stage ('Build PersistentXSS') {
+                    sh 'echo Building PersistentXSS stage'
+                }
+                stage ('Build Insecure') {
+                    sh 'echo Building Insecure stage'
+                }
+            }
+
+	    }
     }
     post {
     	always {
