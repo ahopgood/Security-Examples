@@ -6,6 +6,7 @@ pipeline {
                 git credentialsId: 'github_token', url: 'https://github.com/ahopgood/Security-Examples.git', branch: '${BRANCH_NAME}'
                 sh 'mvn --version'
                 sh 'mvn clean install'
+                stash name: 'PersistentXSS', includes: 'PersistentXSS/target/PersistentXSS-*.jar'
             }
 	    }
 	    stage('Build & Publish Docker Images') {
@@ -16,7 +17,9 @@ pipeline {
                         stage ('Docker Build') {
                             steps {
                                 sh 'echo Building PersistentXSS docker image'
+                                unstash name: 'PersistentXSS'
                                 sh '''
+                                cp PersistentXSS-*.jar PersistentXSS/target/
                                 cd PersistentXSS
                                 TAG=$(date "+%Y%m%d-%H%M")
                                 docker build -t persistent-xss:$TAG -t persistent-xss:latest .
