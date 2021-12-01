@@ -12,8 +12,20 @@ pipeline {
 	        parallel {
                 stage ('Build PersistentXSS') {
                     agent { label 'Docker' }
-                    steps {
-                        sh 'echo Building PersistentXSS stage'
+                    stage ('Build image') {
+                        steps {
+                            sh 'echo Building PersistentXSS docker image'
+                            sh '''
+                            TAG=$(date "+%Y%m%d-%H%M")
+                            docker build -t persistent-xss:$TAG -t persistent-xss:latest .
+                            '''
+                        }
+                    }
+                    stage ('Tag & Push image to docker hub') {
+                        steps {
+                            sh 'echo Creating docker hub tags'
+                            sh 'echo Pushing to docker hub'
+                        }
                     }
                 }
                 stage ('Build Insecure') {
