@@ -12,14 +12,17 @@ pipeline {
 	        agent { label 'Docker' }
 	        parallel {
                 stage ('Build PersistentXSS') {
-                    sh 'echo Building PersistentXSS stage'
+                    steps {
+                        sh 'echo Building PersistentXSS stage'
+                    }
                 }
                 stage ('Build Insecure') {
-                    sh 'echo Building Insecure stage'
+                    steps {
+                        sh 'echo Building Insecure stage'
+                    }
                 }
             }
-
-	    }
+	    } // end parallel docker build stage
     }
     post {
     	always {
