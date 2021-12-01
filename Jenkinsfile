@@ -8,18 +8,26 @@ pipeline {
                 sh 'mvn clean install'
             }
 	    }
-	    stage('docker build') {
+	    stage('Build & Publish Docker Images') {
 	        parallel {
                 stage ('Build PersistentXSS') {
                     agent { label 'Docker' }
-                    steps {
-                        sh 'echo Building PersistentXSS docker image'
-                        sh '''
-                        TAG=$(date "+%Y%m%d-%H%M")
-                        docker build -t persistent-xss:$TAG -t persistent-xss:latest .
-                        '''
-                        sh 'echo Creating docker hub tags'
-                        sh 'echo Pushing to docker hub'
+                    stages {
+                        stage ('Docker Build') {
+                            steps {
+                                sh 'echo Building PersistentXSS docker image'
+                                sh '''
+                                TAG=$(date "+%Y%m%d-%H%M")
+                                docker build -t persistent-xss:$TAG -t persistent-xss:latest .
+                                '''
+                            }
+                        }
+                        stage ('Docker Tag'){
+                            steps {
+                                sh 'echo Creating docker hub tags'
+                                sh 'echo Pushing to docker hub'
+                            }
+                        }
                     }
                 }
                 stage ('Build Insecure') {
