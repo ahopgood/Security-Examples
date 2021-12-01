@@ -9,14 +9,15 @@ pipeline {
             }
 	    }
 	    stage('docker build') {
-	        agent { label 'Docker' }
 	        parallel {
                 stage ('Build PersistentXSS') {
+                    agent { label 'Docker' }
                     steps {
                         sh 'echo Building PersistentXSS stage'
                     }
                 }
                 stage ('Build Insecure') {
+                    agent { label 'Docker' }
                     steps {
                         sh 'echo Building Insecure stage'
                     }
