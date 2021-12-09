@@ -15,6 +15,10 @@ pipeline {
 	    stage('Build & Publish Docker Images') {
 	        parallel {
                 stage ('Build PersistentXSS') {
+                    environment {
+                        IMAGE_NAME="persistent-xss"
+                        NAMESPACE="reclusive/"
+                    }
                     agent { label 'Docker' }
                     stages {
                         stage ('Docker Build') {
@@ -27,12 +31,43 @@ pipeline {
                                 '''
                             }
                         }
-                        stage ('Docker Tag'){
-                            steps {
-                                sh 'echo Creating docker hub tags'
-                                sh 'echo Pushing to docker hub'
+                        stage ('Docker Hub Tag & Push'){
+                            when {
+                                branch 'main'
                             }
-                        }
+                            steps {
+                                sh 'echo Pushing tags to docker hub'
+                                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                                    sh '''
+                                    echo ${PASSWORD} | docker login --username ${USERNAME} --password-stdin
+
+                                    docker tag ${IMAGE_NAME}:${TAG} altairbob/${IMAGE_NAME}:${TAG}
+                                    docker tag ${IMAGE_NAME}:latest altairbob/${IMAGE_NAME}:latest
+
+                                    docker push altairbob/${IMAGE_NAME}:${TAG}
+                                    docker push altairbob/${IMAGE_NAME}:latest
+                                    docker logout
+                                    '''
+                                }
+                            }
+                        } //Docker hub end
+                        stage ('Reclusive Regsistry Tag & Push') {
+                            steps {
+                                sh 'echo Pushing tags to Reclusive Registry'
+                                withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                                    sh '''
+                                    echo ${PASSWORD} | docker login --username ${USERNAME} --password-stdin https://${DOCKER_REGISTRY}
+
+                                    docker tag ${IMAGE_NAME}:${TAG} ${DOCKER_REGISTRY}/${NAMESPACE}${IMAGE_NAME}:${TAG}
+                                    docker tag ${IMAGE_NAME}:latest ${DOCKER_REGISTRY}/${NAMESPACE}${IMAGE_NAME}:latest
+
+                                    docker push ${DOCKER_REGISTRY}/${NAMESPACE}${IMAGE_NAME}:${TAG}
+                                    docker push ${DOCKER_REGISTRY}/${NAMESPACE}${IMAGE_NAME}:latest
+                                    docker logout https://${DOCKER_REGISTRY}
+                                    '''
+                                }
+                            }
+                        }//end Reclusive registry tag & push
                     }
                 }
                 stage ('Build Insecure') {
