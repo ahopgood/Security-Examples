@@ -29,3 +29,11 @@ spring:
     static-locations:
       - file:src/main/resources/static/
       - classpath:/static/
+logging:
+  config: classpath:logback.xml
+  level.root: INFO
+
+security:
+  csp:
+    enabled: false
+    policy: "default-src 'self'"

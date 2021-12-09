@@ -32,4 +32,8 @@ docker-compose up --quiet-pull -d persistent-xss
 Run the `Application.java` class file to run the application.    
 
 If you don't have it installed then you can install [browsersync](https://browsersync.io/) to enable automatic refresh of web assets on file saves.  
-You can start up browser synch like so `browser-sync start --server --files css/*.css,js/*.js,*.html` when in the `/src/main/resources/static/` directory.  
+You can start up browser sync like so 
+```
+browser-sync start --server --files css/*.css,js/*.js,*.html
+``` 
+when in the `/src/main/resources/static/` directory.  

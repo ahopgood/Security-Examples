@@ -1,7 +1,9 @@
 version: "2"
 services:
   persistent-xss:
-    image: persistent-xss:latest
+    image: altairbob/persistent-xss:latest
     container_name: persistent-xss
+    environment:
+      SECURITY_CSP_ENABLED: 'false'
     ports:
       - 8080:8080

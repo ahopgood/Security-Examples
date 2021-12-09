@@ -12,5 +12,4 @@ public class CorsConfiguration implements WebMvcConfigurer {
                 .allowedOrigins("*");
         System.out.println("+++++++ CORS REGISTRY LOADED");
     }
-
 }

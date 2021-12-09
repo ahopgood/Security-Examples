@@ -8,16 +8,15 @@
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="bootstrap.min.4.5.3.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-
+        <link rel="stylesheet" href="bikes.css"/>
     </head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <body>
-        <h1 id="top" class="text-center">Welcome to Bikes Everywhere!</h1>
         <script src="jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
         <script src="bootstrap.bundle.min-4.5.3.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
         <script src="bikes.js"></script>
-
+        <h1 id="top" class="text-center">Welcome to Bikes Everywhere!</h1>
         <div class="container">
             <div class="card-group row">
             </div>
@@ -30,10 +29,10 @@
                     <div class="card-header" id="details-header">
                     </div>
                     <div class="row no-gutters p-2">
-                        <div class="col-md-8">
-                            <img src="" class="card-img" alt="detailed bike picture">
+                        <div class="col-md-8 h-100">
+                            <img src="" class="card-img mh-100 mw-100" alt="detailed bike picture">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 h-100">
                             <div class="card-body">
                                 <p class="card-text"></p>
                             </div>
@@ -48,8 +47,8 @@
                     <button type="button" class="btn btn-primary" data-target="#commentModal" data-toggle="modal">Add Comment</button>
                 </div>
             </div>
-            <div>
-                <img id="details-image" src="" class="img-fluid" alt="">
+            <div class="pt-2">
+                <a role="button" class="btn btn-secondary" href="#top">To Top</a>
             </div>
             <div class="modal fade" tabindex="-1" id="commentModal" aria-hidden="true" aria-labelledby="commentModalLabel">
                 <div class="modal-dialog" role="document">
@@ -72,9 +71,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div>
-                <a role="button" class="btn btn-secondary" href="#top">To Top</a>
             </div>
         </div>
         <div class="card border-dark d-none"  id="template">
