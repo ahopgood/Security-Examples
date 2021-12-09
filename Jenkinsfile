@@ -33,7 +33,7 @@ pipeline {
                         }
                         stage ('Docker Hub Tag & Push'){
                             when {
-                                branch 'main'
+                                branch 'master'
                             }
                             steps {
                                 sh 'echo Pushing tags to docker hub'
