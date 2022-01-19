@@ -31,6 +31,16 @@ pipeline {
                                 '''
                             }
                         }
+                        stage('Docker Image Vulnerability Scan') {
+                            agent { label 'Docker && Grype' }
+                            steps {
+                                git credentialsId: 'github_token', url: 'https://github.com/ahopgood/domain-placeholders.git', branch: '${BRANCH_NAME}'
+                                sh'''
+                                    grype version
+                                    grype ${IMAGE_NAME}:${TAG} -c .grype.yaml
+                                '''
+                            }
+                        } //End Vulnerability Scan Stage
                         stage ('Docker Hub Tag & Push'){
                             when {
                                 branch 'master'
