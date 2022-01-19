@@ -1,4 +1,4 @@
-FROM adoptopenjdk:11-jre-hotspot
+FROM eclipse-temurin:11-jre-focal
 
 WORKDIR /app
 EXPOSE 8080
