@@ -8,7 +8,7 @@ pipeline {
 	        steps {
                 git credentialsId: 'github_token', url: 'https://github.com/ahopgood/Security-Examples.git', branch: '${BRANCH_NAME}'
                 sh 'mvn --version'
-                sh 'mvn clean install'
+                sh 'mvn clean install -s settings.xml'
                 stash name: 'PersistentXSS', includes: 'PersistentXSS/target/PersistentXSS-*.jar'
             }
 	    }
