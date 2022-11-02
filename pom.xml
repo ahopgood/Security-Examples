@@ -22,8 +22,8 @@
         <slf4j.version>1.7.2</slf4j.version>
         <javax.inject.version>1</javax.inject.version>
         <jdbi.version>3.18.0</jdbi.version>
-        <h2.version>2.1.210</h2.version>
-        <flyway.version>8.2.2</flyway.version>
+        <h2.version>1.4.200</h2.version>
+        <flyway.version>7.1.1</flyway.version>
         <hsdqldb.version>2.4.1</hsdqldb.version>
         <mariadb.version>2.3.0</mariadb.version>
         <!-- Plugins -->

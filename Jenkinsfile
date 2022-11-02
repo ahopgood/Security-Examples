@@ -6,7 +6,6 @@ pipeline {
 	stages {
 	    stage('build') {
 	        steps {
-                git credentialsId: 'github_token', url: 'https://github.com/ahopgood/Security-Examples.git', branch: '${BRANCH_NAME}'
                 sh 'mvn --version'
                 sh 'mvn clean install -s settings.xml'
                 stash name: 'PersistentXSS', includes: 'PersistentXSS/target/PersistentXSS-*.jar'
@@ -19,7 +18,7 @@ pipeline {
                         IMAGE_NAME="persistent-xss"
                         NAMESPACE="reclusive/"
                     }
-                    agent { label 'Docker' }
+                    agent { label 'Docker && Grype' }
                     stages {
                         stage ('Docker Build') {
                             steps {
@@ -32,9 +31,7 @@ pipeline {
                             }
                         }
                         stage('Docker Image Vulnerability Scan') {
-                            agent { label 'Docker && Grype' }
                             steps {
-                                git credentialsId: 'github_token', url: 'https://github.com/ahopgood/Security-Examples.git', branch: '${BRANCH_NAME}'
                                 sh'''
                                     grype version
                                     grype ${IMAGE_NAME}:${TAG} -c .grype.yaml
