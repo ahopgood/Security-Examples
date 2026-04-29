@@ -2,7 +2,7 @@ pipeline {
     environment {
 	    TAG = sh(script: 'date "+%Y%m%d-%H%M"', returnStdout: true)
     }
-	agent  { label 'Java11' }
+	agent  { label 'Java17' }
 	stages {
 	    stage('build') {
 	        steps {
