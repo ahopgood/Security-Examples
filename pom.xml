@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.5</version>
+        <version>3.5.14</version>
     </parent>
 
     <modules>
@@ -17,16 +17,17 @@
 
     <properties>
         <java.version>11</java.version>
-        <spring-boot.version>2.7.2</spring-boot.version>
-        <lombok.version>1.18.24</lombok.version>
-        <slf4j.version>1.7.2</slf4j.version>
+        <spring-boot.version>3.5.14</spring-boot.version>
+        <lombok.version>1.18.30</lombok.version>
+<!--        <slf4j.version>1.7.2</slf4j.version>-->
         <javax.inject.version>1</javax.inject.version>
         <jdbi.version>3.18.0</jdbi.version>
         <h2.version>2.2.220</h2.version>
-        <flyway.version>8.2.2</flyway.version>
+<!--        <flyway.version>8.2.2</flyway.version>-->
         <hsdqldb.version>2.4.1</hsdqldb.version>
         <mariadb.version>2.3.0</mariadb.version>
-        <snakeyaml.version>1.32</snakeyaml.version>
+        <snakeyaml.version>2.0</snakeyaml.version>
+        <protobuf.java.version>3.25.5</protobuf.java.version>
 <!--        <jackson-databind.version>2.13.4.1</jackson-databind.version>-->
 <!--        <jackson-bom.version>2.13.4</jackson-bom.version>-->
         <!-- Plugins -->
@@ -103,6 +104,11 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>${flyway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>${protobuf.java.version}</version>
         </dependency>
     </dependencies>
 </project>

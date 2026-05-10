@@ -5,11 +5,13 @@ import com.alexander.security.examples.persistent.xss.persistence.mapper.JdbiBik
 import com.alexander.security.examples.persistent.xss.service.mapper.BikeDetailsMapper;
 import com.alexander.security.examples.persistent.xss.service.mapper.BikeThumbnailMapper;
 import org.jdbi.v3.core.Jdbi;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
@@ -27,9 +29,8 @@ public class Application {
         return DataSourceBuilder.create().build();
     }
 
-    @Inject
     @Bean
-    public Jdbi jdbi(DataSource dataSource) {
+    public Jdbi setJdbi(@Autowired DataSource dataSource) {
        return Jdbi.create(dataSource);
     }
 

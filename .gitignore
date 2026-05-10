@@ -3,3 +3,5 @@
 **/*.iml
 *.iml
 /.idea/jarRepositories.xml
+/.idea/
+/.idea/

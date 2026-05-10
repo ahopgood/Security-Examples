@@ -1,4 +1,4 @@
-FROM eclipse-temurin:11-jre-focal
+FROM eclipse-temurin:21.0.11_10-jre-noble
 
 WORKDIR /app
 EXPOSE 8080
