@@ -65,11 +65,11 @@ pipeline {
                                     sh '''
                                     echo ${PASSWORD} | docker login --username ${USERNAME} --password-stdin https://${DOCKER_REGISTRY}
 
-                                    docker tag ${IMAGE_NAME}:${TAG} ${DOCKER_REGISTRY}/${NAMESPACE}${IMAGE_NAME}:${TAG}
-                                    docker tag ${IMAGE_NAME}:latest ${DOCKER_REGISTRY}/${NAMESPACE}${IMAGE_NAME}:latest
+                                    docker tag ${IMAGE_NAME}:${TAG} ${DOCKER_REGISTRY}${NAMESPACE}${IMAGE_NAME}:${TAG}
+                                    docker tag ${IMAGE_NAME}:latest ${DOCKER_REGISTRY}${NAMESPACE}${IMAGE_NAME}:latest
 
-                                    docker push ${DOCKER_REGISTRY}/${NAMESPACE}${IMAGE_NAME}:${TAG}
-                                    docker push ${DOCKER_REGISTRY}/${NAMESPACE}${IMAGE_NAME}:latest
+                                    docker push ${DOCKER_REGISTRY}${NAMESPACE}${IMAGE_NAME}:${TAG}
+                                    docker push ${DOCKER_REGISTRY}${NAMESPACE}${IMAGE_NAME}:latest
                                     docker logout https://${DOCKER_REGISTRY}
                                     '''
                                 }
